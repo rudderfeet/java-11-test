@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-Java11TestApplication<java-11-test>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "us.mccrory.java11test.Java11TestApplication",
+            "projectName": "java-11-test",
+            "args": ""
+        }
+    ]
+}
