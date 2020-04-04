@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: java-11-test
+  name: java-11-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: java-11-test
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: java-11-test
+    spec:
+      containers:
+      - image: scottmccrory/java-11-test
+        name: java-11-test
+        resources: {}
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: java-11-test
+  name: java-11-test
+spec:
+  ports:
+  - name: 8081-8081
+    port: 8081
+    protocol: TCP
+    targetPort: 8081
+  selector:
+    app: java-11-test
+  type: ClusterIP
+status:
+  loadBalancer: {}
