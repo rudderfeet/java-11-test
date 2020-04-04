@@ -1,6 +1,10 @@
 FROM openjdk:11-slim
-ARG DEPENDENCY=target/dependency
-COPY ${DEPENDENCY}/BOOT-INF/lib /app/lib
-COPY ${DEPENDENCY}/META-INF /app/META-INF
-COPY ${DEPENDENCY}/BOOT-INF/classes /app
-ENTRYPOINT ["java","-cp","app:app/lib/*","us.mccrory.java11test.Java11TestApplication"]
+
+# Ideally run the app as non-root!
+# RUN addgroup -S spring && adduser -S spring -G spring
+# USER spring:spring
+
+ARG JAR_FILE=target/*.jar
+COPY ${JAR_FILE} app.jar
+
+ENTRYPOINT ["java","-jar","/app.jar","us.mccrory.java11test.Java11TestApplication"]
