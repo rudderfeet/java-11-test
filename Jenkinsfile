@@ -1,8 +1,6 @@
 pipeline {
 
-    agent {
-        docker { image 'maven:3-jdk-11-slim' }
-    }
+    agent any
 
     stages {
 
