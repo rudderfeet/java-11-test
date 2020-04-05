@@ -1,10 +1,12 @@
 pipeline {
 
-    agent any
+    agent {
+        docker { image 'maven:3-jdk-11-slim' }
+    }
 
     stages {
 
-        stage('Source') {
+        stage('Get Sources') {
 
             steps {
                 git 'https://github.com/rudderfeet/java-11-test.git'
@@ -12,7 +14,7 @@ pipeline {
 
         }
 
-        stage('Compile') {
+        stage('Build and Test') {
 
             tools {
                 maven 'Maven_3.6.3'
