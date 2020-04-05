@@ -7,7 +7,7 @@ pipeline {
         stage('Source') {
 
             steps {
-                git 'https://github.com/digitalvarys/jenkins-tutorials.git'
+                git 'https://github.com/rudderfeet/java-11-test.git'
             }
 
         }
