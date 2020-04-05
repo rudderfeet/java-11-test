@@ -1,24 +1,29 @@
-node{
+pipeline {
 
-  stage ('Build') {
+    agent any
 
-    git url: 'https://github.com/cyrille-leclerc/multi-module-maven-project'
+    stages {
 
-    withMaven(
+        stage('Source') {
 
-        // Maven installation declared in the Jenkins "Global Tool Configuration"
-        maven: 'Maven_3.6.3',
+            steps {
+                git 'https://github.com/digitalvarys/jenkins-tutorials.git'
+            }
 
-        // Maven settings.xml file defined with the Jenkins Config File Provider Plugin
-        // We recommend to define Maven settings.xml globally at the folder level using 
-        // navigating to the folder configuration in the section "Pipeline Maven Configuration / Override global Maven configuration"
-        // or globally to the entire master navigating to  "Manage Jenkins / Global Tools Configuration"
-        //mavenSettingsConfig: 'my-maven-settings'
-        ) {
+        }
 
-        // Run the maven build
-        sh "mvn clean verify"
+        stage('Compile') {
 
-    } // withMaven will discover the generated Maven artifacts, JUnit Surefire & FailSafe & FindBugs & SpotBugs reports...
-  }
+            tools {
+                maven 'Maven_3.6.3'
+            }
+
+            steps {
+                sh 'mvn clean verify'
+            }
+
+        }
+
+    }
+
 }
