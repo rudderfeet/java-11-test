@@ -24,14 +24,6 @@ pipeline {
 
         }
 
-        stage('Docker List Containers') {
-
-            steps {
-                sh 'docker ps'
-            }
-
-        }
-
     }
 
 }
