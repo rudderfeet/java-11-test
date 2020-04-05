@@ -1,7 +1,7 @@
 node {
 
-    stage "Clone from Git" {
-        git 'https://github.com/rudderfeet/java-11-test.git'
+    stage('Clone sources') {
+        git url: 'https://github.com/rudderfeet/java-11-test.git'
     }
 
     stage("Compilation") {
