@@ -24,6 +24,18 @@ pipeline {
 
         }
 
+        stage('Docker List Containers') {
+
+            tools {
+                Docker 'Docker'
+            }
+
+            steps {
+                sh 'docker ps'
+            }
+
+        }
+
     }
 
 }
