@@ -5,14 +5,14 @@ node {
     }
 
     stage("Compilation") {
-        sh "./mvnw clean install -DskipTests"
+        sh "mvn clean install -DskipTests"
     }
         
     stage("Tests") {
         parallel 'Unit tests': {
             stage("Runing unit tests") {
                 try {
-                    sh "./mvnw test -Punit"
+                    sh "mvn test -Punit"
                 } catch(err) {
                     step([$class: 'JUnitResultArchiver', testResults: 
                         '**/target/surefire-reports/TEST-*UnitTest.xml'])
@@ -24,7 +24,7 @@ node {
         }, 'Integration tests': {
             stage("Runing integration tests") {
                 try {
-                    sh "./mvnw test -Pintegration"
+                    sh "mvn test -Pintegration"
                 } catch(err) {
                     step([$class: 'JUnitResultArchiver', testResults: 
                         '**/target/surefire-reports/TEST-'
