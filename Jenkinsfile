@@ -34,7 +34,7 @@ pipeline {
 
             steps {
                 script {
-                    docker.build registry + ":$BUILD_NUMBER"
+                    docker.build registry
                 }
             }
 
@@ -46,7 +46,7 @@ pipeline {
 
                 script {
                     docker.withRegistry('', registryCredential ) {
-                        dockerImage.push()
+                        sh 'docker push scottmccrory/java-11-test'
                     }
                 }
 
