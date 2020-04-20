@@ -9,7 +9,7 @@ pipeline {
 
     stages {
 
-        stage('Get Sources') {
+        stage('Get Application Sources') {
 
             steps {
                 git 'https://github.com/rudderfeet/java-11-test.git'
@@ -17,7 +17,7 @@ pipeline {
 
         }
 
-        stage('Build and Test') {
+        stage('Build and Test Application') {
 
             tools {
                 maven 'Maven_3.6.3'
@@ -29,14 +29,36 @@ pipeline {
 
         }
 
-        stage('Building image') {
+        stage('Build Docker Image') {
 
-            steps{
+            steps {
                 script {
                     docker.build registry + ":$BUILD_NUMBER"
                 }
             }
 
+        }
+
+        stage('Deploy Docker Image') {
+
+            steps {
+
+                script {
+                    docker.withRegistry('', registryCredential ) {
+                        dockerImage.push()
+                    }
+                }
+
+            }
+
+        }
+
+        stage('Remove Unused Docker Image') {
+
+            steps{
+                sh "docker rmi $registry:$BUILD_NUMBER"
+            }
+            
         }
 
     }
