@@ -46,10 +46,18 @@ pipeline {
 
                 script {
                     docker.withRegistry('', registryCredential ) {
-                        sh 'docker push scottmccrory/java-11-test'
+                        sh "docker push $registry"
                     }
                 }
 
+            }
+
+        }
+
+        stage('Remove Unused Docker Image') {
+
+            steps{
+                sh "docker rmi $registry"
             }
 
         }
