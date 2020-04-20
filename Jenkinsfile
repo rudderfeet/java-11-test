@@ -5,6 +5,7 @@ pipeline {
       registryCredential = 'dockerhub'
     } 
 
+    // See https://www.edureka.co/community/55640/jenkins-docker-docker-image-jenkins-pipeline-docker-registry
     agent { label 'docker' }
 
     stages {
@@ -51,14 +52,6 @@ pipeline {
 
             }
 
-        }
-
-        stage('Remove Unused Docker Image') {
-
-            steps{
-                sh "docker rmi $registry:$BUILD_NUMBER"
-            }
-            
         }
 
     }
