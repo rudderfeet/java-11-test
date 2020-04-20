@@ -1,5 +1,10 @@
 pipeline {
 
+    environment {
+      registry = "scottmccrory/java-11-test"
+      registryCredential = 'dockerhub'
+    } 
+
     agent any
 
     stages {
@@ -20,6 +25,16 @@ pipeline {
 
             steps {
                 sh 'mvn clean verify'
+            }
+
+        }
+
+        stage('Building image') {
+
+            steps{
+                script {
+                    docker.build registry + ":$BUILD_NUMBER"
+                }
             }
 
         }
