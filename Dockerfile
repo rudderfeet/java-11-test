@@ -3,9 +3,9 @@ FROM arm32v7/adoptopenjdk:11-jre-hotspot
 VOLUME /tmp
 
 ARG DEPENDENCY=target/dependency
-COPY ${DEPENDENCY}/BOOT-INF/lib /app/lib
-COPY ${DEPENDENCY}/META-INF /app/META-INF
-COPY ${DEPENDENCY}/BOOT-INF/classes /app
+COPY ./target/dependency/BOOT-INF/lib /app/lib
+COPY ./target/dependency/META-INF /app/META-INF
+COPY ./target/dependency/BOOT-INF/classes /app
 
 EXPOSE 8081
 
