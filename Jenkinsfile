@@ -21,7 +21,7 @@ pipeline {
         stage('Build and Test Application') {
 
             tools {
-                maven 'Maven_3.6.3'
+                maven 'Maven3'
             }
 
             steps {
