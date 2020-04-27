@@ -3,7 +3,7 @@ FROM arm32v7/adoptopenjdk:11-jre-hotspot
 VOLUME /tmp
 
 ARG JAR_FILE=target/*.jar
-COPY ${JAR_FILE} app.jar
+COPY ${JAR_FILE} /app.jar
 
 EXPOSE 8081
 
