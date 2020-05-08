@@ -1,3 +1,16 @@
+# =============================
+# Kubernetest deployment script
+# =============================
+# Created with:
+#   kubectl create deployment java-11-test --image=scottmccrory/java-11-demo --dry-run -o=yaml > deployment.yaml
+#   echo --- >> deployment.yaml
+#   kubectl create service clusterip java-11-test --tcp=8081:8081 --dry-run -o=yaml >> deployment.yaml
+# Deployed with:
+#   kubectl apply -f deployment.yaml
+# Status checked with:
+#   kubectl get all -o wide
+# Proxied with:
+#   kubectl port-forward svc/java-11-test 8081:8081
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -6,7 +19,7 @@ metadata:
     app: java-11-test
   name: java-11-test
 spec:
-  replicas: 1
+  replicas: 4
   selector:
     matchLabels:
       app: java-11-test
