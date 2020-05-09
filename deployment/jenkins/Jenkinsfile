@@ -2,6 +2,7 @@ pipeline {
 
     environment {
       registry = "scottmccrory/java-11-test"
+      dockerfile = "./docker/Dockerfile"
       registryCredential = 'dockerhub'
     } 
 
@@ -34,7 +35,7 @@ pipeline {
 
             steps {
                 script {
-                    docker.build registry
+                    docker.build(registry, dockerfile)
                 }
             }
 
