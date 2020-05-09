@@ -2,7 +2,7 @@ pipeline {
 
     environment {
       registry = "scottmccrory/java-11-test"
-      dockerfile = "./deployment/docker/Dockerfile"
+      dockerfile = "./deployment/docker/"
       registryCredential = 'dockerhub'
     } 
 
