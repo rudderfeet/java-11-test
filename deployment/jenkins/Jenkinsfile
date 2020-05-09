@@ -2,7 +2,7 @@ pipeline {
 
     environment {
       registry = "scottmccrory/java-11-test"
-      dockerfile = "./deployment/docker/"
+      dockerfile = "./deployment/docker/Dockerfile"
       registryCredential = 'dockerhub'
     } 
 
@@ -35,7 +35,7 @@ pipeline {
 
             steps {
                 script {
-                    docker.build(registry, dockerfile)
+                    docker.build(registry, "-f ${dockerfile} .")
                 }
             }
 
