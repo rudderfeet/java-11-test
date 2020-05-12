@@ -1,16 +1,22 @@
 # =============================
 # Kubernetest deployment script
 # =============================
-# Created with:
+# This is a classical kubectl based script (vs. Helm) that was initially generated with:
 #   kubectl create deployment java-11-test --image=scottmccrory/java-11-demo --dry-run -o=yaml > deployment.yaml
 #   echo --- >> deployment.yaml
 #   kubectl create service clusterip java-11-test --tcp=8081:8081 --dry-run -o=yaml >> deployment.yaml
-# Deployed with:
+# Deploy with:
 #   kubectl apply -f deployment.yaml
-# Status checked with:
+# Check status with:
 #   kubectl get all -o wide
-# Proxied with:
+# K3S comes with Traefik built-in, so simply go to http://macpi-master/ and it should appear.
+#   Note that the Ingress section below will tell you more about the automatic routing.
+# Alternatively port-forward it directly with:
 #   kubectl port-forward svc/java-11-test 8081:8081
+#
+# ----------
+# DEPLOYMENT
+# ----------
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -35,6 +41,9 @@ spec:
         name: java-11-test
         resources: {}
 status: {}
+# ---------------
+# SERVICE MAPPING
+# ---------------
 ---
 apiVersion: v1
 kind: Service
@@ -46,6 +55,10 @@ spec:
   ports:
     - protocol: TCP
       port: 8081
+# ----------------------------
+# INGRESS (INBOUND NETWORKING)
+# ----------------------------
+# See https://kubernetes.io/docs/concepts/services-networking/ingress/
 ---
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
@@ -55,9 +68,15 @@ metadata:
     kubernetes.io/ingress.class: "traefik"
 spec:
   rules:
+  - host: java-11-test.macpi.mccrory.us
+    http:
+      paths:
+      - backend:
+          serviceName: java-11-test-service
+          servicePort: 8081
   - http:
       paths:
-      - path: /
+      - path: /java-11-test
         backend:
           serviceName: java-11-test-service
           servicePort: 8081
