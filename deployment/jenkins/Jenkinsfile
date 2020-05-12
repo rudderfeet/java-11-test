@@ -66,7 +66,8 @@ pipeline {
         stage('Apply deployment to k3s cluster') {
 
             steps{
-                sh "./deployment/kubectl/kube-apply-java-11-test.sh"
+                sh "export KUBECONFIG=./deployment/kubectl/kubeconfig"
+                sh "kubectl apply -f ./deployment/kubectl/deployment.yaml"
             }
 
         }
