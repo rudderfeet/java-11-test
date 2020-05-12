@@ -63,6 +63,14 @@ pipeline {
 
         }
 
+        stage('Apply deployment to k3s cluster') {
+
+            steps{
+                sh "./deployment/kubectl/kube-apply-java-11-test.sh"
+            }
+
+        }
+
     }
 
 }
