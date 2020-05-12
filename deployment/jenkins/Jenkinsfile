@@ -66,8 +66,7 @@ pipeline {
         stage('Apply deployment to k3s cluster') {
 
             steps{
-                sh "export KUBECONFIG=./deployment/kubectl/kubeconfig"
-                sh "kubectl apply -f ./deployment/kubectl/deployment.yaml"
+                sh "export KUBECONFIG=/home/pi/kubeconfig ; kubectl apply -f ./deployment/kubectl/deployment.yaml"
             }
 
         }
