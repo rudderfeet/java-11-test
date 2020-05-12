@@ -9,8 +9,8 @@
 #   kubectl apply -f deployment.yaml
 # Check status with:
 #   kubectl get all -o wide
-# K3S comes with Traefik built-in, so simply go to http://macpi-master/ and it should appear.
-#   Note that the Ingress section below will tell you more about the automatic routing.
+# K3S comes with Traefik built-in, so go to http://java-11-test.macpi.mccrory.us/ and it should appear;
+#   the Ingress section below will tell you more about the automatic routing.
 # Alternatively port-forward it directly with:
 #   kubectl port-forward svc/java-11-test 8081:8081
 #
@@ -71,12 +71,7 @@ spec:
   - host: java-11-test.macpi.mccrory.us
     http:
       paths:
-      - backend:
-          serviceName: java-11-test-service
-          servicePort: 8081
-  - http:
-      paths:
-      - path: /java-11-test
+      - path: /
         backend:
           serviceName: java-11-test-service
           servicePort: 8081
