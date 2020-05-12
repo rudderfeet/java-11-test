@@ -6,7 +6,7 @@ kubectl get all
 
 # Now you need to be able to connect to the application, which you have exposed as a Service in Kubernetes.
 # One way to do that, which works great at development time, is to create an SSH tunnel:
-kubectl port-forward svc/demo 8081:8081
+#kubectl port-forward svc/demo 8081:8081
 
 # Then you can verify that the app is running in another terminal ({"status":"UP"})
-curl localhost:8081/actuator/health
+#curl localhost:8081/actuator/health

@@ -39,18 +39,25 @@ status: {}
 apiVersion: v1
 kind: Service
 metadata:
-  creationTimestamp: null
-  labels:
-    app: java-11-test
-  name: java-11-test
+  name: java-11-test-service
 spec:
-  ports:
-  - name: 8081-8081
-    port: 8081
-    protocol: TCP
-    targetPort: 8081
   selector:
     app: java-11-test
-  type: ClusterIP
-status:
-  loadBalancer: {}
+  ports:
+    - protocol: TCP
+      port: 8081
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: java-11-test-ingress
+  annotations:
+    kubernetes.io/ingress.class: "traefik"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        backend:
+          serviceName: java-11-test-service
+          servicePort: 8081
