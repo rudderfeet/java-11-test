@@ -1,19 +1,25 @@
 pipeline {
 
+    // Common properties used in the stages below
     environment {
       registry = "scottmccrory/java-11-test"
       dockerfile = "./deployment/docker/Dockerfile"
       registryCredential = 'dockerhub'
     } 
 
+    // This project requires a build server node with the following label(s);
     // See https://www.edureka.co/community/55640/jenkins-docker-docker-image-jenkins-pipeline-docker-registry
+    // In our case, the app image is an ARM based one, then the job requires docker to build the image
+    // and finally we need kubctl and a kubeconfig to deploy with.
     agent { label 'arm && docker && kubernetes' }
 
+    // Define the stages this build must go through
     stages {
 
         stage('Get Application Sources') {
 
             steps {
+                // Clone/pull the latest code
                 git 'https://github.com/rudderfeet/java-11-test.git'
             }
 
@@ -22,10 +28,12 @@ pipeline {
         stage('Build and Test Application') {
 
             tools {
+                // Require a Maven installation with the following label
                 maven 'Maven3'
             }
 
             steps {
+                // Typical Maven rebuild and test operation
                 sh 'mvn clean verify'
             }
 
@@ -35,6 +43,7 @@ pipeline {
 
             steps {
                 script {
+                    // Build the image with the Dockerfile specified in properties above
                     docker.build(registry, "-f ${dockerfile} .")
                 }
             }
@@ -47,6 +56,7 @@ pipeline {
 
                 script {
                     docker.withRegistry('', registryCredential ) {
+                        // With the specified Docker Hub rep and credentials, push the latest image
                         sh "docker push $registry"
                     }
                 }
@@ -58,6 +68,7 @@ pipeline {
         stage('Remove Unused Docker Image') {
 
             steps{
+                // Clean up the build image from the local registry since we're only using it for builds
                 sh "docker rmi $registry"
             }
 
@@ -66,6 +77,8 @@ pipeline {
         stage('Apply deployment to k3s cluster') {
 
             steps{
+                // Finally point to the kubernetes cluster referenced by /home/pi/kubeconfig
+                // and apply the deployment with the updated image, a la CI/CD!
                 sh "export KUBECONFIG=/home/pi/kubeconfig ; kubectl apply -f ./deployment/kubectl/deployment.yaml"
             }
 
