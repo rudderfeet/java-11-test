@@ -79,10 +79,7 @@ pipeline {
             steps{
                 // Finally point to the kubernetes cluster referenced by /home/pi/kubeconfig
                 // and apply the deployment with the updated image, a la CI/CD!
-                sh "export KUBECONFIG=/home/pi/kubeconfig"
-                sh "kubectl delete service java-11-test-service"
-                sh "kubectl delete deployment java-11-test"
-                sh "kubectl apply -f ./deployment/kubectl/deployment.yaml"
+                sh "export KUBECONFIG=/home/pi/kubeconfig ; kubectl delete service java-11-test-service ; kubectl delete deployment java-11-test ; kubectl apply -f ./deployment/kubectl/deployment.yaml"
             }
 
         }
