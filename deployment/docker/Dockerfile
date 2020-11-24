@@ -1,4 +1,4 @@
-FROM arm32v7/adoptopenjdk:11-jre-hotspot
+FROM adoptopenjdk:11-jre-hotspot
 
 VOLUME /tmp
 
