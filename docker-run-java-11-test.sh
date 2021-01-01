@@ -1,5 +1,3 @@
-docker build -t scottmccrory/java-11-test -f Dockerfile
-docker push scottmccrory/java-11-test
 docker run \
     --name java-11-test \
     --restart always \
