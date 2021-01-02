@@ -2,18 +2,24 @@ version: 0.2
 
 phases:
   install:
-    runtime-versions:
-      java: corretto11
     commands:
+      # Install and run Docker to build the image
       - nohup /usr/local/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://127.0.0.1:2375 --storage-driver=overlay2 &
       - timeout 15 sh -c "until docker info; do echo .; sleep 1; done"
+  pre_build: 
+    commands: 
+      # Login to Amazon Container Registry for this project's repository
+      - echo Logging in to Amazon ECR.... 
+      - aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 770629738917.dkr.ecr.us-east-2.amazonaws.com
   build:
     commands:
       - echo Build started on `date`
-      - mvn test
-      - docker build -t helloworld .
-artifacts:
-  files:
-    - target/java-11-test-0.0.1-SNAPSHOT.jar
-    - appspec.yml
-  discard-paths: yes
+      - mvn package
+      - echo Building the Docker image... 
+      - docker build -t java-11-test .
+      - docker tag java-11-test:latest 770629738917.dkr.ecr.us-east-2.amazonaws.com/java-11-test:latest
+  post_build: 
+    commands: 
+      - echo Build completed on `date` 
+      - echo Pushing to repo
+      - docker push 770629738917.dkr.ecr.us-east-2.amazonaws.com/java-11-test:latest
