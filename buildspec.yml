@@ -4,9 +4,10 @@ version: 0.2
 
 phases:
   install:
-    # Install and run Docker to build the image
-    runtime-versions:
-      docker: 18
+    commands:
+      # Install and run Docker to build the image
+      - nohup /usr/local/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://127.0.0.1:2375 --storage-driver=overlay2 &
+      - timeout 15 sh -c "until docker info; do echo .; sleep 1; done"
   pre_build: 
     commands: 
       # Login to Amazon Container Registry to access this project's repository
