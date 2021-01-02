@@ -9,17 +9,23 @@ phases:
   pre_build: 
     commands: 
       # Login to Amazon Container Registry for this project's repository
-      - echo Logging in to Amazon ECR.... 
-      - aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 770629738917.dkr.ecr.us-east-2.amazonaws.com
+      - echo Logging in to Amazon ECR....
+      - REGION_NAME=us-east-2
+      - REPOSITORY_URI=770629738917.dkr.ecr.us-east-2.amazonaws.com/java-11-test
+      - aws --version
+      - $(aws ecr get-login --region $REGION_NAME --no-include-email)
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=${COMMIT_HASH:=latest}
   build:
     commands:
       - echo Build started on `date`
       - mvn package
-      - echo Building the Docker image... 
-      - docker build -t java-11-test .
-      - docker tag java-11-test:latest 770629738917.dkr.ecr.us-east-2.amazonaws.com/java-11-test:latest
+      - echo Building the Docker image...
+      - docker build -t $REPOSITORY_URI:latest .
+      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
   post_build: 
     commands: 
       - echo Build completed on `date` 
-      - echo Pushing to repo
-      - docker push 770629738917.dkr.ecr.us-east-2.amazonaws.com/java-11-test:latest
+      - echo Pushing the Docker images...
+      - docker push $REPOSITORY_URI:latest
+      - docker push $REPOSITORY_URI:$IMAGE_TAG
