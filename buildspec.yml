@@ -2,6 +2,9 @@ version: 0.2
 
 # See https://aws.amazon.com/blogs/devops/build-a-continuous-delivery-pipeline-for-your-container-images-with-amazon-ecr-as-source/
 
+eb_codebuild_settings:
+  CodeBuildServiceRole: arn:aws:iam::770629738917:role/service-role/codebuild-java-11-test-service-role
+  ComputeType: BUILD_GENERAL1_SMALL
 phases:
   install:
     commands:
