@@ -10,10 +10,9 @@ phases:
     commands: 
       # Login to Amazon Container Registry for this project's repository
       - echo Logging in to Amazon ECR....
-      - REGION_NAME=us-east-2
-      - REPOSITORY_URI=770629738917.dkr.ecr.us-east-2.amazonaws.com/java-11-test
       - aws --version
-      - $(aws ecr get-login --region $REGION_NAME --no-include-email)
+      - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
+      - REPOSITORY_URI=770629738917.dkr.ecr.us-east-2.amazonaws.com/java-11-test
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=${COMMIT_HASH:=latest}
   build:
@@ -29,3 +28,6 @@ phases:
       - echo Pushing the Docker images...
       - docker push $REPOSITORY_URI:latest
       - docker push $REPOSITORY_URI:$IMAGE_TAG
+artifacts:
+  files:
+    - imageDetail.json
