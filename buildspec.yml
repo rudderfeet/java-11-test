@@ -18,10 +18,11 @@ phases:
       # Login to Amazon Container Registry to access this project's repository
       - echo Logging in to Amazon ECR....
       - aws --version
-      - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
-      - REPOSITORY_URI=770629738917.dkr.ecr.us-east-2.amazonaws.com/java-11-test
-      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
-      - IMAGE_TAG=${COMMIT_HASH:=latest}
+      - IMAGE_REPO_NAME=java-11-test
+      - REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME 
+      - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION) 
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7) 
+      - IMAGE_TAG=${COMMIT_HASH:=latest}  
   build:
     commands:
       - echo Build started on `date`
@@ -36,6 +37,9 @@ phases:
       - docker push $REPOSITORY_URI:latest
       - docker push $REPOSITORY_URI:$IMAGE_TAG
       - echo Image push completed.
+      - printf '[{"name":"%s","imageUri":"%s"}]' $IMAGE_REPO_NAME $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json 
+      - cat imagedefinitions.json
 artifacts:
   files:
     - Dockerrun.aws.json
+    - imagedefinitions.json
