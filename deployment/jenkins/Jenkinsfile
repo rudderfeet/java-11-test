@@ -3,7 +3,7 @@ pipeline {
     // Common properties used in the stages below
     environment {
       registry = "scottmccrory/java-11-test"
-      dockerfile = "./deployment/docker/Dockerfile"
+      dockerfile = "./Dockerfile"
       registryCredential = 'dockerhub'
     } 
 
@@ -50,7 +50,7 @@ pipeline {
 
         }
 
-        stage('Deploy Docker Image') {
+        stage('Push Docker Image to Repo') {
 
             steps {
 
@@ -74,15 +74,15 @@ pipeline {
 
         }
 
-        stage('Apply deployment to k3s cluster') {
+        //stage('Apply deployment to k3s cluster') {
 
-            steps{
+            //steps{
                 // Finally point to the kubernetes cluster referenced by /home/pi/kubeconfig
                 // and apply the deployment with the updated image, a la CI/CD!
-                sh "export KUBECONFIG=/home/pi/kubeconfig ; kubectl apply -f ./deployment/kubectl/deployment.yaml"
-            }
+                //sh "export KUBECONFIG=/home/pi/kubeconfig ; kubectl apply -f ./deployment/kubectl/deployment.yaml"
+            //}
 
-        }
+        //}
 
     }
 
