@@ -18,7 +18,7 @@ pipeline {
     // We'll also share our m2repo with it to avoid repeated caching (per-host)
     agent {
         docker {
-            image 'hypriot:rpi-java'
+            image 'hypriot/rpi-java'
             args '-v $HOME/.m2:/root/.m2'
         }
     }
