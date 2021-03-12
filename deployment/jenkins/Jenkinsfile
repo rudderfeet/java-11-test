@@ -2,23 +2,14 @@ pipeline {
 
     // Common properties used in the stages below
     environment {
-      registry = "scottmccrory/java-11-test"
-      dockerfile = "./Dockerfile"
-      registryCredential = 'dockerhub'
+        REGISTRY = "scottmccrory/java-11-test"
+        DOCKERFILE = "./Dockerfile"
+        REGISTRYCREDENTIAL = 'dockerhub'
     } 
 
-    // This project requires a build server node with the following label(s);
-    // See https://www.edureka.co/community/55640/jenkins-docker-docker-image-jenkins-pipeline-docker-registry
-    // In our case, the app image is an ARM based one, then the job requires docker to build the image,
-    // and finally we need kubctl and a kubeconfig to deploy with, so "label 'arm && docker && kubernetes'".
-    // agent { label 'arm && docker' }
-
-    // Alternatively we can use a Docker container to spin up the build environment as per:
-    // https://www.jenkins.io/doc/book/pipeline/docker/
-    // We'll also share our m2repo with it to avoid repeated caching (per-host)
     agent {
-        docker {
-            image 'arm32v7/maven'
+        dockerfile {
+            filename 'Dockerfile-build'
             args '-v $HOME/.m2:/root/.m2'
         }
     }
@@ -54,7 +45,7 @@ pipeline {
             steps {
                 script {
                     // Build the image with the Dockerfile specified in properties above
-                    docker.build(registry, "-f ${dockerfile} .")
+                    docker.build(REGISTRY, "-f ${DOCKERFILE} .")
                 }
             }
 
@@ -65,9 +56,9 @@ pipeline {
             steps {
 
                 script {
-                    docker.withRegistry('', registryCredential ) {
+                    docker.withRegistry('', REGISTRYCREDENTIAL ) {
                         // With the specified Docker Hub rep and credentials, push the latest image
-                        sh "docker push $registry"
+                        sh "docker push $REGISTRY"
                     }
                 }
 
@@ -79,7 +70,7 @@ pipeline {
 
             steps{
                 // Clean up the build image from the local registry since we're only using it for builds
-                sh "docker rmi $registry"
+                sh "docker rmi $REGISTRY"
             }
 
         }
