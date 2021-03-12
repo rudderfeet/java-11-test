@@ -9,9 +9,21 @@ pipeline {
 
     // This project requires a build server node with the following label(s);
     // See https://www.edureka.co/community/55640/jenkins-docker-docker-image-jenkins-pipeline-docker-registry
-    // In our case, the app image is an ARM based one, then the job requires docker to build the image
-    // and finally we need kubctl and a kubeconfig to deploy with.
-    agent { label 'arm && docker' }
+    // In our case, the app image is an ARM based one, then the job requires docker to build the image,
+    // and finally we need kubctl and a kubeconfig to deploy with, so "label 'arm && docker && kubernetes'".
+    // agent { label 'arm && docker' }
+
+    // Alternatively we can use a Docker container to spin up the build environment as per:
+    // https://www.jenkins.io/doc/book/pipeline/docker/
+    // We'll require a machine with docker installed, regardless of its chipset
+    // We'll also share our m2repo with it to avoid repeated caching (per-host)
+    agent {
+        label 'docker'
+        docker {
+            image 'maven:3-alpine'
+            args '-v $HOME/.m2:/root/.m2'
+        }
+    }
 
     // Define the stages this build must go through
     stages {
