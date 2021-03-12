@@ -15,10 +15,8 @@ pipeline {
 
     // Alternatively we can use a Docker container to spin up the build environment as per:
     // https://www.jenkins.io/doc/book/pipeline/docker/
-    // We'll require a machine with docker installed, regardless of its chipset
     // We'll also share our m2repo with it to avoid repeated caching (per-host)
     agent {
-        label 'docker'
         docker {
             image 'maven:3-alpine'
             args '-v $HOME/.m2:/root/.m2'
