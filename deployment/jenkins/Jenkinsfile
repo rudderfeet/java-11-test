@@ -7,10 +7,11 @@ pipeline {
         REGISTRYCREDENTIAL = 'dockerhub'
     } 
 
-    agent {
-        dockerfile {
-            filename 'Dockerfile-build'
-            args '-v $HOME/.m2:/root/.m2'
+     agent {
+        docker {
+            image 'arm32v7/maven'
+            // Socket solution described at http://jpetazzo.github.io/2015/09/03/do-not-use-docker-in-docker-for-ci/
+            args '-v /var/run/docker.sock:/var/run/docker.sock -v $HOME/.m2:/root/.m2'
         }
     }
 
