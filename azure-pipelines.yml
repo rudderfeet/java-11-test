@@ -36,7 +36,7 @@ stages:
       inputs:
         command: 'buildAndPush'
         containerRegistry: 'Docker Hub'
-        repository: 'java-11-test'
+        repository: 'scottmccrory/java-11-test'
         dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
         tags: |
           $(tag)
