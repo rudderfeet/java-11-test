@@ -52,4 +52,6 @@ stages:
       inputs:
         azureSubscription: 'Pay-As-You-Go(2094ef89-09da-4eda-97c3-81392adc5f6d)'
         appName: 'java-11-test'
+        deployToSlotOrASE: true
+        slotName: 'production'
         containers: 'scottmccrory.azurecr.io/scottmccrory/java-11-test:latest'
