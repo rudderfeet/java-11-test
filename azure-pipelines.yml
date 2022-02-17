@@ -39,3 +39,19 @@ stages:
         command: 'buildAndPush'
         Dockerfile: '**/Dockerfile'
         tags: 'latest'
+- stage: 'Deploy'
+  displayName: 'Deploy the container'
+  dependsOn: Build
+  jobs:
+  - job: 'Deploy'
+    displayName: 'Deploy job'
+    pool:
+      vmImage: ubuntu-latest
+    variables:
+    - group: Release
+    steps:
+    - task: AzureWebAppContainer@1
+      inputs:
+        azureSubscription: 'Pay-As-You-Go(2094ef89-09da-4eda-97c3-81392adc5f6d)'
+        appName: 'java-11-test'
+        containers: 'scottmccrory.azurecr.io/scottmccrory/java-11-test:latest'
