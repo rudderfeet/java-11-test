@@ -34,8 +34,8 @@ stages:
     - task: Docker@2
       displayName: Build and Push Docker Image
       inputs:
-        command: 'buildAndPush'
-        containerRegistry: 'Docker Hub'
+        containerRegistry: 'Docker Hub - scottmccrory'
         repository: 'scottmccrory/java-11-test'
-        dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-        tags: latest
+        command: 'buildAndPush'
+        Dockerfile: '**/Dockerfile'
+        tags: 'latest'
