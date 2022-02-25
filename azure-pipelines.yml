@@ -1,6 +1,7 @@
 # Docker
 # Build a Docker image
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+# GCR portion: https://cloud.google.com/architecture/creating-a-cicd-pipeline-azure-pipelines-cloud-run
 
 trigger:
 - master
@@ -13,7 +14,7 @@ variables:
 
 stages:
 - stage: Build
-  displayName: Build image
+  displayName: Build App and Container
   jobs:
   - job: Build
     displayName: Build
@@ -32,7 +33,7 @@ stages:
         effectivePomSkip: false
         sonarQubeRunAnalysis: false
     - task: Docker@2
-      displayName: Build and Push Docker Image
+      displayName: Build and Push Docker Image to ACR
       inputs:
         containerRegistry: 'ACR - scottmccrory'
         repository: 'scottmccrory/java-11-test'
