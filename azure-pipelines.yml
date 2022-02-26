@@ -39,4 +39,6 @@ stages:
         repository: 'scottmccrory/java-11-test'
         command: 'buildAndPush'
         Dockerfile: '**/Dockerfile'
-        tags: 'latest'
+        tags: |
+          latest
+          $(tag)
